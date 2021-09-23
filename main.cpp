@@ -1,8 +1,10 @@
 #include <iostream>
+#include <string>
 #include <prefix_tree.h>
 
 using namespace std;
 using structures::PrefixTree;
+using structures::ArrayList;
 
 int main() {
     string filename;
@@ -21,10 +23,13 @@ int main() {
     //     cout << word << endl;
     // }
 
-    prefix_tree.insert("abc", 1, 1);
-    cout << "Contains abc:" << prefix_tree.contains("abc") << endl;
-    prefix_tree.remove("abc");
-    cout << "Contains abc:" << prefix_tree.contains("abc") << endl;
+    prefix_tree.insert("bear", 1, 1);
+    prefix_tree.insert("bell", 2, 1);
+    prefix_tree.insert("bid", 3, 1);
+    prefix_tree.insert("buy", 4, 1);
+    prefix_tree.insert("sell", 4, 1);
+    prefix_tree.insert("stock", 4, 1);
+    prefix_tree.insert("stop", 4, 1);
 
     return 0;
 }
