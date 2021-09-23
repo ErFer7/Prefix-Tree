@@ -35,6 +35,12 @@ class PrefixTree {
 
     ArrayList<string> aphabetical_order() const;
 
+    unsigned long prefix_search(const string& prefix) const;
+
+    unsigned long position_search(const string& prefix) const;
+
+    unsigned long length_search(const string& prefix) const;
+
    private:
     struct Node {
         Node* _children[26];
@@ -73,7 +79,7 @@ class PrefixTree {
             if (index < prefix.length()) {
                 if (_children[prefix[index] - ASCII_OFFSET] == nullptr) {
                     _children[prefix[index] - ASCII_OFFSET] = new Node(position, length);
-                    cout << "["<< this << "]: Node [" << _children[prefix[index] - ASCII_OFFSET] << "] created with char [" << prefix[index] - ASCII_OFFSET << "] as header" << endl;
+                    //cout << "["<< this << "]: Node [" << _children[prefix[index] - ASCII_OFFSET] << "] created with char [" << prefix[index] - ASCII_OFFSET << "]" << endl;
 
                     if (_children[prefix[index] - ASCII_OFFSET] != nullptr) {
                         if (index < prefix.length() - 1) {
@@ -117,7 +123,7 @@ class PrefixTree {
                     delete _children[prefix[index] - ASCII_OFFSET];
                     _children[prefix[index] - ASCII_OFFSET] = nullptr;
 
-                    if (position() == 0 && prefix_count() == 1) {
+                    if (length() == 0 && prefix_count() == 1) {
                         delete this;
                         return true;
                     }
@@ -134,15 +140,12 @@ class PrefixTree {
 
         bool contains(const string& prefix, const std::size_t& index) const {
             if (index < prefix.length() - 1) {
-                cout << "[" << this << "]: Node [" << _children[prefix[index] - ASCII_OFFSET] << "] with header [" << prefix[index] - ASCII_OFFSET << "] will search" << endl;
                 return _children[prefix[index] - ASCII_OFFSET]->contains(prefix, index + 1);
             } else if (index == prefix.length() - 1 && _children[prefix[index] - ASCII_OFFSET] != nullptr) {
-                cout << "[" << this << "]: Node found, prefix [" << prefix << "], index [" << index << "]" << endl;
-                if (_children[prefix[index] - ASCII_OFFSET]->position() != 0) {
+                if (_children[prefix[index] - ASCII_OFFSET]->length() != 0) {
                     return true;
                 }
             }
-            cout << "[" << this << "]: Node not found, prefix [" << prefix << "], index [" << index << "]" << endl;
             return false;
         }
 
@@ -150,9 +153,8 @@ class PrefixTree {
             string new_prefix(prefix);
             new_prefix.push_back(char(index + ASCII_OFFSET));
 
-            if (position() != 0) {
+            if (length() != 0) {
                 list.push_back(new_prefix);
-                cout << "Prefix of [" << prefix_count() << "] words" << endl;
             }
 
             for (int i = 0; i < 26; ++i) {
@@ -160,6 +162,58 @@ class PrefixTree {
                     _children[i]->alphabetical_order(new_prefix, list, i);
                 }
             }
+        }
+
+        unsigned long prefix_search(const string& prefix, const std::size_t& index) {
+            if (index < prefix.length() - 1) {
+                if (_children[prefix[index] - ASCII_OFFSET] != nullptr) {
+                    return _children[prefix[index] - ASCII_OFFSET]->prefix_search(prefix, index + 1);
+                }
+            } else if (index == prefix.length() - 1) {
+                if (_children[prefix[index] - ASCII_OFFSET] != nullptr) {
+                    return _children[prefix[index] - ASCII_OFFSET]->prefix_count();
+                }
+            } else {
+                return prefix_count();
+            }
+
+            return 0;
+        }
+
+        unsigned long position_search(const string& prefix, const std::size_t& index) {
+            if (index < prefix.length() - 1) {
+                if (_children[prefix[index] - ASCII_OFFSET] != nullptr) {
+                    return _children[prefix[index] - ASCII_OFFSET]->position_search(prefix, index + 1);
+                }
+            } else if (index == prefix.length() - 1) {
+                if (_children[prefix[index] - ASCII_OFFSET] != nullptr) {
+                    if (_children[prefix[index] - ASCII_OFFSET]->length() != 0) {
+                        return _children[prefix[index] - ASCII_OFFSET]->position();
+                    }
+                }
+            } else if (length() != 0) {
+                return position();
+            }
+
+            return -1;
+        }
+
+        unsigned long length_search(const string& prefix, const std::size_t& index) {
+            if (index < prefix.length() - 1) {
+                if (_children[prefix[index] - ASCII_OFFSET] != nullptr) {
+                    return _children[prefix[index] - ASCII_OFFSET]->length_search(prefix, index + 1);
+                }
+            } else if (index == prefix.length() - 1) {
+                if (_children[prefix[index] - ASCII_OFFSET] != nullptr) {
+                    if (_children[prefix[index] - ASCII_OFFSET]->length() != 0) {
+                        return _children[prefix[index] - ASCII_OFFSET]->length();
+                    }
+                }
+            } else if (length() != 0) {
+                return length();
+            }
+
+            return 0;
         }
     };
 
@@ -186,10 +240,10 @@ structures::PrefixTree::~PrefixTree() {
 
 void structures::PrefixTree::insert(const string& prefix, unsigned long position,
                                     unsigned long length) {
-    cout << "Inserting [" << prefix << "]" << endl;
+    //cout << "Inserting [" << prefix << "]" << endl;
     if (_root[prefix[0] - ASCII_OFFSET] == nullptr) {
         _root[prefix[0] - ASCII_OFFSET] = new Node(position, length);
-        cout << "Node [" << _root[prefix[0] - ASCII_OFFSET] << "] created with char [" << prefix[0] - ASCII_OFFSET << "] as header" << endl;
+        //cout << "Node [" << _root[prefix[0] - ASCII_OFFSET] << "] created with char [" << prefix[0] - ASCII_OFFSET << "]" << endl;
         if (_root[prefix[0] - ASCII_OFFSET] != nullptr) {
             if (prefix.length() > 1) {
                 _root[prefix[0] - ASCII_OFFSET]->position(0);
@@ -209,7 +263,6 @@ void structures::PrefixTree::insert(const string& prefix, unsigned long position
 }
 
 void structures::PrefixTree::remove(const string& prefix) {
-    cout << "Removing [" << prefix << "]" << endl;
     if (_root[prefix[0] - ASCII_OFFSET] != nullptr) {
         if (contains(prefix)) {
             bool deleted_node = _root[prefix[0] - ASCII_OFFSET]->remove(prefix, 1);
@@ -239,6 +292,7 @@ std::size_t structures::PrefixTree::size() const { return _size; }
 
 structures::ArrayList<string> structures::PrefixTree::aphabetical_order() const {
     structures::ArrayList<string> list(size());
+
     if (!empty()) {
         string prefix;
         for (int i = 0; i < 26; ++i) {
@@ -248,8 +302,29 @@ structures::ArrayList<string> structures::PrefixTree::aphabetical_order() const 
         }
     }
 
-    for (std::size_t i = 0; i < list.size(); ++i) {
-        cout << "List: " << list.at(i) << endl;
-    }
     return list;
+}
+
+unsigned long structures::PrefixTree::prefix_search(const string& prefix) const {
+    if (_root[prefix[0] - ASCII_OFFSET] != nullptr) {
+        return _root[prefix[0] - ASCII_OFFSET]->prefix_search(prefix, 1);
+    } else {
+        return 0;
+    }
+}
+
+unsigned long structures::PrefixTree::position_search(const string& prefix) const {
+    if (_root[prefix[0] - ASCII_OFFSET] != nullptr) {
+        return _root[prefix[0] - ASCII_OFFSET]->position_search(prefix, 1);
+    } else {
+        return -1;
+    }
+}
+
+unsigned long structures::PrefixTree::length_search(const string& prefix) const {
+    if (_root[prefix[0] - ASCII_OFFSET] != nullptr) {
+        return _root[prefix[0] - ASCII_OFFSET]->length_search(prefix, 1);
+    } else {
+        return 0;
+    }
 }
