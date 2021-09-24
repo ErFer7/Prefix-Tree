@@ -140,11 +140,17 @@ class PrefixTree {
 
         bool contains(const string& prefix, const std::size_t& index) const {
             if (index < prefix.length() - 1) {
-                return _children[prefix[index] - ASCII_OFFSET]->contains(prefix, index + 1);
-            } else if (index == prefix.length() - 1 && _children[prefix[index] - ASCII_OFFSET] != nullptr) {
-                if (_children[prefix[index] - ASCII_OFFSET]->length() != 0) {
-                    return true;
+                if (_children[prefix[index] - ASCII_OFFSET] != nullptr) {
+                    return _children[prefix[index] - ASCII_OFFSET]->contains(prefix, index + 1);
                 }
+            } else if (index == prefix.length() - 1) {
+                if (_children[prefix[index] - ASCII_OFFSET] != nullptr) {
+                    if (_children[prefix[index] - ASCII_OFFSET]->length() != 0) {
+                        return true;
+                    }
+                }
+            } else {
+                return true;
             }
             return false;
         }
@@ -279,7 +285,6 @@ void structures::PrefixTree::remove(const string& prefix) {
 
 bool structures::PrefixTree::contains(const string& prefix) const {
     if (_root[prefix[0] - ASCII_OFFSET] != nullptr) {
-
         return _root[prefix[0] - ASCII_OFFSET]->contains(prefix, 1);
     } else {
         return false;

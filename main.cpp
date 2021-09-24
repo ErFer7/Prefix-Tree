@@ -16,44 +16,34 @@ int main() {
 
     cin >> filename;  // entrada
 
-    dicFile.open(filename);
+    dicFile.open(filename, ios_base::binary);
 
     if (dicFile.is_open()) {
-        char c;
         bool reading_prefix = false;
+        string line;
         string prefix = "";
-        unsigned long current_position = 0;
         unsigned long position = 0;
-        unsigned long length = 0;
 
-        while (dicFile.get(c)) {
-            switch (c) {
-                case '[':
-                    reading_prefix = true;
-                    length = 0;
-                    current_position = position;
-                    break;
-                case ']':
-                    reading_prefix = false;
-                    break;
-                case '\n':
-                    prefix_tree.insert(prefix, current_position, length);
-                    prefix.clear();
-                    break;
-                default:
-                    if (reading_prefix) {
-                        prefix.push_back(c);
-                    }
-                    break;
+        while (getline(dicFile, line)) {
+            for (std::size_t i = 0; i < line.size(); ++i) {
+                switch (line[i]) {
+                    case '[':
+                        reading_prefix = true;
+                        break;
+                    case ']':
+                        reading_prefix = false;
+                        break;
+                    default:
+                        if (reading_prefix) {
+                            prefix.push_back(line[i]);
+                        }
+                        break;
+                }
             }
 
-            ++length;
-            ++position;
-        }
-
-        if (prefix.length() > 0) {
-            prefix_tree.insert(prefix, current_position, length);
+            prefix_tree.insert(prefix, position, line.size());
             prefix.clear();
+            position += line.size() + 1;
         }
 
         dicFile.close();
