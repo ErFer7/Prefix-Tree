@@ -1,13 +1,15 @@
 // Copyright [2021] <Eric Fernandes Evaristo>
+// v1.0
+
 #ifndef STRUCTURES_ARRAY_LIST_H
 #define STRUCTURES_ARRAY_LIST_H
 
-#include <cstdint>
+#include <cstdint>  // std::size_t
 
 namespace structures {
 
 template <typename T>
-//  Classe ArrayList
+//  Classe ArrayList, Lista em vetor
 class ArrayList {
    public:
     // Construtor padrão
@@ -16,7 +18,6 @@ class ArrayList {
     explicit ArrayList(std::size_t max_size);
     // Destrutor
     ~ArrayList();
-
     // Limpa a lista
     void clear();
     // Insere no fim
@@ -55,7 +56,6 @@ class ArrayList {
     const T& at(std::size_t index) const;
     // Sobrecarga do operador [] (constante)
     const T& operator[](std::size_t index) const;
-    // descricao do 'operator []' na FAQ da disciplina
 
    private:
     T* contents;            // Dados
@@ -67,8 +67,9 @@ class ArrayList {
 
 }  // namespace structures
 
-#endif
-
+/**
+ * Constrói um objeto structures::ArrayList<T>.
+ **/
 template <typename T>
 structures::ArrayList<T>::ArrayList() {
     max_size_ = DEFAULT_MAX;      // Inicializa o tamanho máximo
@@ -76,6 +77,11 @@ structures::ArrayList<T>::ArrayList() {
     size_ = 0;                    // Inicializa o tamanho
 }
 
+/**
+ * Constrói um objeto structures::ArrayList<T>.
+ *      Parâmetros:
+ *          max_size (std::size_t): tamanho máximo.
+ **/
 template <typename T>
 structures::ArrayList<T>::ArrayList(std::size_t max_size) {
     max_size_ = max_size;         // Inicializa o tamanho máximo
@@ -83,16 +89,27 @@ structures::ArrayList<T>::ArrayList(std::size_t max_size) {
     size_ = 0;                    // Inicializa o tamanho
 }
 
+/**
+ * Destrói o objeto structures::ArrayList<T>.
+ **/
 template <typename T>
 structures::ArrayList<T>::~ArrayList() {
     delete[] contents;  // Apaga a array de conteúdo
 }
 
+/**
+ * Limpa a lista.
+ **/
 template <typename T>
 void structures::ArrayList<T>::clear() {
     size_ = 0;  // Redefine o tamanho
 }
 
+/**
+ * Insere um dado no final da lista.
+ *      Parâmetros:
+ *          data (T): dado a ser inserido.
+ **/
 template <typename T>
 void structures::ArrayList<T>::push_back(const T& data) {
     // Caso a lista não esteja cheia adiciona os dados no final
@@ -104,6 +121,11 @@ void structures::ArrayList<T>::push_back(const T& data) {
     }
 }
 
+/**
+ * Insere um dado no início da lista.
+ *      Parâmetros:
+ *          data (T): dado a ser inserido.
+ **/
 template <typename T>
 void structures::ArrayList<T>::push_front(const T& data) {
     // Caso a lista não esteja cheia adiciona os dados no início
@@ -122,6 +144,12 @@ void structures::ArrayList<T>::push_front(const T& data) {
     }
 }
 
+/**
+ * Insere um dado na posição do índice na lista.
+ *      Parâmetros:
+ *          data (T): Dado a ser inserido.
+ *          index (std::size_t): Índice de inserção.
+ **/
 template <typename T>
 void structures::ArrayList<T>::insert(const T& data, std::size_t index) {
     // Caso a lista não esteja cheia adiciona os dados na posição
@@ -145,6 +173,11 @@ void structures::ArrayList<T>::insert(const T& data, std::size_t index) {
     }
 }
 
+/**
+ * Insere um dado em ordem.
+ *      Parâmetros:
+ *          data (T): Dado a ser inserido.
+ **/
 template <typename T>
 void structures::ArrayList<T>::insert_sorted(const T& data) {
     // Caso a lista não esteja cheia adiciona os dados em ordem
@@ -184,6 +217,12 @@ void structures::ArrayList<T>::insert_sorted(const T& data) {
     }
 }
 
+/**
+ * Retorna e remove um dado no índice especificado.
+ *      Parâmetros:
+ *          index (std::size_t): Índice de remoção.
+ *      Retorna o dado (T).
+ **/
 template <typename T>
 T structures::ArrayList<T>::pop(std::size_t index) {
     // Retira o dado na posição caso a lista não esteja vazia
@@ -210,6 +249,10 @@ T structures::ArrayList<T>::pop(std::size_t index) {
     }
 }
 
+/**
+ * Retorna e remove um dado no fim da lista.
+ *      Retorna o dado (T).
+ **/
 template <typename T>
 T structures::ArrayList<T>::pop_back() {
     // Retira o dado no fim caso a lista não esteja vazia
@@ -225,6 +268,10 @@ T structures::ArrayList<T>::pop_back() {
     }
 }
 
+/**
+ * Retorna e remove um dado no início da lista.
+ *      Retorna o dado (T).
+ **/
 template <typename T>
 T structures::ArrayList<T>::pop_front() {
     if (!empty()) {
@@ -243,6 +290,11 @@ T structures::ArrayList<T>::pop_front() {
     }
 }
 
+/**
+ * Remove o dado.
+ *      Parâmetros:
+ *          data (T): Dado a ser removido.
+ **/
 template <typename T>
 void structures::ArrayList<T>::remove(const T& data) {
     // Remove o dado caso a lista não esteja vazia
@@ -254,6 +306,10 @@ void structures::ArrayList<T>::remove(const T& data) {
     }
 }
 
+/**
+ * Checa se a lista está cheia.
+ *      Retorna verdadeiro caso a lista esteja cheia.
+ **/
 template <typename T>
 bool structures::ArrayList<T>::full() const {
     // Verifica se a lista está cheia
@@ -265,6 +321,10 @@ bool structures::ArrayList<T>::full() const {
     }
 }
 
+/**
+ * Checa se a lista está vazia.
+ *      Retorna verdadeiro caso a lista esteja vazia.
+ **/
 template <typename T>
 bool structures::ArrayList<T>::empty() const {
     // Verifica se a lista está vazia
@@ -276,6 +336,12 @@ bool structures::ArrayList<T>::empty() const {
     }
 }
 
+/**
+ * Checa se a lista contém o dado.
+ *      Parâmetros:
+ *          data (T): Dado a ser pesquisado.
+ *      Retorna verdadeiro caso a lista tenha o dado.
+ **/
 template <typename T>
 bool structures::ArrayList<T>::contains(const T& data) const {
     // Verifica se a lista contém o dado
@@ -299,6 +365,12 @@ bool structures::ArrayList<T>::contains(const T& data) const {
     return dataFound;  // Retorna o estado da procura do dado
 }
 
+/**
+ * Retorna o índice do dado.
+ *      Parâmetros:
+ *          data (T): Dado a ser pesquisado.
+ *      Retorna o índice (std::size_t).
+ **/
 template <typename T>
 std::size_t structures::ArrayList<T>::find(const T& data) const {
     // Procura pelo dado específico. Caso o dado não tenha sido encontrado
@@ -317,32 +389,50 @@ std::size_t structures::ArrayList<T>::find(const T& data) const {
     return index;
 }
 
+/**
+ * Retorna o tamanho da lista (std::size_t).
+ **/
 template <typename T>
 std::size_t structures::ArrayList<T>::size() const {
     // Retorna o tamanho
-
     return size_;
 }
 
+/**
+ * Retorna o tamanho máximo da lista (std::size_t).
+ **/
 template <typename T>
 std::size_t structures::ArrayList<T>::max_size() const {
     // Retorna o tamanho máximo
-
     return max_size_;
 }
 
+/**
+ * Retorna o dado no índice (T) de forma segura.
+ *      Parâmetros:
+ *          index (std::size_t): Índice do dado.
+ **/
 template <typename T>
 T& structures::ArrayList<T>::at(std::size_t index) {
-    return const_cast<T&>(
-        const_cast<const ArrayList*>(this)->at(index));
+    return const_cast<T&>(const_cast<const ArrayList*>(this)->at(index));
 }
 
+/**
+ * Retorna o dado no índice (T).
+ *      Parâmetros:
+ *          index (std::size_t): Índice do dado.
+ **/
 template <typename T>
 T& structures::ArrayList<T>::operator[](std::size_t index) {
     // Retorna o dado na posição
     return contents[index];
 }
 
+/**
+ * Retorna o dado no índice (T) de forma segura e apenas para leitura.
+ *      Parâmetros:
+ *          index (std::size_t): Índice do dado.
+ **/
 template <typename T>
 const T& structures::ArrayList<T>::at(std::size_t index) const {
     // Retorna o dado na posição caso a lista não esteja vazia e a posição seja
@@ -361,8 +451,15 @@ const T& structures::ArrayList<T>::at(std::size_t index) const {
     }
 }
 
+/**
+ * Retorna o dado no índice (T), apenas para leitura.
+ *      Parâmetros:
+ *          index (std::size_t): Índice do dado.
+ **/
 template <typename T>
 const T& structures::ArrayList<T>::operator[](std::size_t index) const {
     // Retorna o dado na posição de forma constante (apenas leitura)
     return contents[index];
 }
+
+#endif
