@@ -1,5 +1,5 @@
 // Copyright [2021] <Eric Fernandes Evaristo>
-// v1.0
+// v1.0.1
 
 #ifndef STRUCTURES_PREFIX_TREE_H
 #define STRUCTURES_PREFIX_TREE_H
@@ -515,7 +515,7 @@ unsigned long structures::PrefixTree::position_search(const string& prefix) cons
         // Pesquisa recursiva
         return _root[prefix[0] - ASCII_OFFSET]->position_search(prefix, 1);
     } else {
-        return -1;  // Nenhum prefixo encontrado
+        return 0;  // Nenhum prefixo encontrado
     }
 }
 

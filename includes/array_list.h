@@ -1,5 +1,5 @@
 // Copyright [2021] <Eric Fernandes Evaristo>
-// v1.0
+// v1.0.1
 
 #ifndef STRUCTURES_ARRAY_LIST_H
 #define STRUCTURES_ARRAY_LIST_H

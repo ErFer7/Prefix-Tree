@@ -1,5 +1,5 @@
 // Copyright [2021] <Eric Fernandes Evaristo>
-// v1.0
+// v1.0.1
 
 #include <prefix_tree.h>
 
