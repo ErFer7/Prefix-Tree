@@ -328,7 +328,7 @@ class PrefixTree {
                 return position();       // Retorna a posição
             }
 
-            return -1;  // Caso o prefixo procurado não tenha sido encontrado
+            return 0;  // Caso o prefixo procurado não tenha sido encontrado
         }
 
         /**
